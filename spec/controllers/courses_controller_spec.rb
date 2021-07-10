@@ -1,19 +1,20 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CoursesController, type: :controller do
   describe '#create' do
     context 'success' do
       it 'return 201' do
-        params = { 
-          course: 
-            { name: "test", 
-              tutors_attributes: 
+        params = {
+          course:
+            { name: 'test',
+              tutors_attributes:
               [
-                { name: 'ajay', mobile: '9812121218'}
-              ] 
-            }   
-          }
-        
+                { name: 'ajay', mobile: '9812121218' }
+              ] }
+        }
+
         post :create, params: params
         response_data = JSON.parse(response.body)
 
@@ -30,15 +31,14 @@ RSpec.describe CoursesController, type: :controller do
       end
 
       it 'return 422' do
-        params = { 
-          course: 
-            { name: "mca", 
-              tutors_attributes: 
+        params = {
+          course:
+            { name: 'mca',
+              tutors_attributes:
               [
-                { name: 'test', mobile: '9812121213'}
-              ] 
-            }   
-          }
+                { name: 'test', mobile: '9812121213' }
+              ] }
+        }
 
         post :create, params: params
         response_data = JSON.parse(response.body)
@@ -66,7 +66,7 @@ RSpec.describe CoursesController, type: :controller do
     it 'Will return bank it record not exists' do
       get :index
       response_data = JSON.parse(response.body)
-      expect(response_data['courses']).to eq([]) 
+      expect(response_data['courses']).to eq([])
     end
   end
 end

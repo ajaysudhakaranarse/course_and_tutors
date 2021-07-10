@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Course < ApplicationRecord
   has_many :tutors, index_errors: true, dependent: :destroy
 

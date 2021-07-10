@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 class CoursesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
     course = Course.new(create_params)
     if course.save
-      render json: {status: I18n.t('status.success'), message: I18n.t('course.create.success')}, status: :created
+      render json: { status: I18n.t('status.success'), message: I18n.t('course.create.success') }, status: :created
     else
-      render json: {status: I18n.t('status.failed'), message: course.errors.messages }, status: :unprocessable_entity
+      render json: { status: I18n.t('status.failed'), message: course.errors.messages }, status: :unprocessable_entity
     end
   end
 
@@ -18,6 +20,6 @@ class CoursesController < ApplicationController
   private
 
   def create_params
-    params.require(:course).permit(:name, tutors_attributes: [:name, :mobile])
+    params.require(:course).permit(:name, tutors_attributes: %i[name mobile])
   end
 end
