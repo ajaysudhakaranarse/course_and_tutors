@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 20210709131920) do
 
   create_table "tutors", force: :cascade do |t|
     t.string "name"
-    t.string "email"
     t.string "mobile"
     t.integer "course_id"
     t.datetime "created_at", null: false

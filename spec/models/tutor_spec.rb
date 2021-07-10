@@ -2,13 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Tutor, type: :model do
   describe 'validation' do
+    it { should validate_presence_of(:name) }
+
     it { should validate_uniqueness_of(:mobile) }
 
     it { should allow_value("9812121212").for(:mobile) }
-
-    it { should_not allow_value("98121212abc").for(:mobile) }
-
-    it { should_not allow_value("6812121212").for(:mobile) }
 
     context 'tutor_assign_to_course?' do
       before do

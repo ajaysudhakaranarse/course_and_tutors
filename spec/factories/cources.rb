@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :course do
-    name 'test'
+    name 'MCA'
   end
 end

@@ -1,8 +1,9 @@
 class Tutor < ApplicationRecord
   belongs_to :course
 
-  validates :mobile, uniqueness: true 
-  validates :mobile, format: {with: /[7-9]{2}[0-9]{8}/, message: 'Invalid mobile number'}
+  validates :name, presence: true
+  validates :mobile, uniqueness: true
+  validates :mobile, format: {with: /[0-9]{10}/, message: 'Invalid mobile number'}
   validate :tutor_assign_to_course?
 
   def tutor_assign_to_course?

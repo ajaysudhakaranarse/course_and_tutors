@@ -11,7 +11,7 @@ class CoursesController < ApplicationController
   end
 
   def index
-    courses = Course.all.includes(:tutors).as_json
+    courses = Course.all.includes(:tutors).as_json(include: :tutors)
     render json: { courses: courses }
   end
 

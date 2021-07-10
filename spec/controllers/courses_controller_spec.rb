@@ -32,10 +32,10 @@ RSpec.describe CoursesController, type: :controller do
       it 'return 422' do
         params = { 
           course: 
-            { name: "test", 
+            { name: "mca", 
               tutors_attributes: 
               [
-                { name: 'ajay', mobile: '9812121218'}
+                { name: 'test', mobile: '9812121213'}
               ] 
             }   
           }
@@ -45,6 +45,28 @@ RSpec.describe CoursesController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response_data['status']).to eq('failed')
       end
+    end
+  end
+
+  describe '#index' do
+    it 'Will return course with its tutors' do
+      course = create(:course)
+      tutor  = create(:tutor, course: course)
+
+      get :index
+      response_data = JSON.parse(response.body)
+
+      expect(response).to have_http_status(:ok)
+      expect(response_data['courses'].count).to eq 1
+      expect(response_data['courses'][0]['name']).to eq(course.name)
+      expect(response_data['courses'][0]['tutors'][0]['name']).to eq(tutor.name)
+      expect(response_data['courses'][0]['tutors'][0]['mobile']).to eq(tutor.mobile)
+    end
+
+    it 'Will return bank it record not exists' do
+      get :index
+      response_data = JSON.parse(response.body)
+      expect(response_data['courses']).to eq([]) 
     end
   end
 end
