@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe CoursesController, type: :controller do
   describe '#create' do
     context 'success' do
+      before do
+        sign_in
+      end
+
       it 'return 201' do
         params = {
           course:
@@ -25,30 +29,47 @@ RSpec.describe CoursesController, type: :controller do
     end
 
     context 'failure' do
-      before do
-        course = create(:course)
-        create(:tutor, course: course)
+      context 'valid user' do
+        before do
+          sign_in
+          course = create(:course)
+          create(:tutor, course: course)
+        end
+
+        it 'return 422' do
+          params = {
+            course:
+              { name: 'mca',
+                tutors_attributes:
+                [
+                  { name: 'test', mobile: '9812121213' }
+                ] }
+          }
+
+          post :create, params: params
+          response_data = JSON.parse(response.body)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response_data['status']).to eq('failed')
+        end
       end
 
-      it 'return 422' do
-        params = {
-          course:
-            { name: 'mca',
-              tutors_attributes:
-              [
-                { name: 'test', mobile: '9812121213' }
-              ] }
-        }
+      context 'Invalid user' do
+        it 'return invalid user' do
+          request.headers['Authorization'] = '1234'
 
-        post :create, params: params
-        response_data = JSON.parse(response.body)
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response_data['status']).to eq('failed')
+          post :create, params: {}
+          response_data = JSON.parse(response.body)
+          expect(response_data['message']).to eq(I18n.t('user.unauthorize'))
+        end
       end
     end
   end
 
   describe '#index' do
+    before do
+      sign_in
+    end
+
     it 'Will return course with its tutors' do
       course = create(:course)
       tutor  = create(:tutor, course: course)
@@ -69,4 +90,8 @@ RSpec.describe CoursesController, type: :controller do
       expect(response_data['courses']).to eq([])
     end
   end
+end
+
+def sign_in
+  request.headers['Authorization'] = User.encoded_string(ENV['username'], ENV['password'])
 end
