@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  def authorize
+    token = request.headers['Authorization']
+    decoded = User.decoded_string(token)
+    render json: { message: I18n.t('user.unauthorize') } unless decoded == ENV['username'] + ENV['password']
+  end
 end

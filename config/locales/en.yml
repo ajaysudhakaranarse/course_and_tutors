@@ -36,3 +36,5 @@ en:
   course:
     create:
       success: 'Course and tutors created successfully'
+  user:
+    unauthorize: 'Invalid user'
