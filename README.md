@@ -6,19 +6,40 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+  2.5
 
-* System dependencies
+* Rails version
+  5.1.7
 
-* Configuration
+* Database
+  sqlite3
 
-* Database creation
+* Database initialization: rails db:create, rails db:migrate, rails db:seed
 
-* Database initialization
+* How to run the test suite: rspec
 
-* How to run the test suite
+* API information
 
-* Services (job queues, cache servers, search engines, etc.)
+1. Login
+  url: http://{URL}/login
+  method: get
+  response: { token: '' }
 
-* Deployment instructions
+2. Courses
+  - Create
+    url: http://{URL}/courses
+    method: post
+    headers: {'Content-Type': 'application/json', 'Authorization': token}
+    params:
+      { "course":
+        { "name": "mca",
+          "tutors_attributes":
+            [
+              { "name": "test", "mobile": "9812121213"}
+            ]
+        }
+      }
 
-* ...
+  - Index
+    url: http://{URL}/courses
+    method: get
