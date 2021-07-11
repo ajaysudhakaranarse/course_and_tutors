@@ -5,13 +5,15 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
 development:
   <<: *default
   database: course_and_tutors
+  username: 'postgres'
+  password: 'postgres'
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -19,6 +21,9 @@ development:
 test:
   <<: *default
   database: course_and_tutors_test
+  username: 'postgres'
+  password: 'postgres'
+
 
 production:
   <<: *default
