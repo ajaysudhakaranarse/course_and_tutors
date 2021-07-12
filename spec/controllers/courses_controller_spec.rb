@@ -15,7 +15,7 @@ RSpec.describe CoursesController, type: :controller do
             { name: 'test',
               tutors_attributes:
               [
-                { name: 'ajay', mobile: '9812121218' }
+                { name: 'test', mobile: '9812121218' }
               ] }
         }
 
@@ -88,6 +88,65 @@ RSpec.describe CoursesController, type: :controller do
       get :index
       response_data = JSON.parse(response.body)
       expect(response_data['courses']).to eq([])
+    end
+  end
+
+  describe '#add_tutors' do
+    before do
+      sign_in
+    end
+
+    context 'success' do
+      before do
+        @course = create(:course)
+        tutor  = create(:tutor, course: @course)
+      end
+
+      it 'add tutors for existing course' do
+        params = {
+          id: @course.id,
+          tutors:
+            [
+              { name: 'test', mobile: '9812121218' }
+            ]
+        }
+
+        post :add_tutors, params: params
+        response_data = JSON.parse(response.body)
+        expect(response_data['status']).to eq('success')
+        expect(response_data['message']).to eq(I18n.t('course.update.success'))
+      end
+    end
+
+    context 'failure' do
+      it 'return course not found' do
+        params = { id: 100 }
+
+        post :add_tutors, params: params
+        response_data = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:not_found)
+        expect(response_data['status']).to eq('failed')
+        expect(response_data['message']).to eq(I18n.t('course.not_found'))
+      end
+
+      it 'will not create tutor if its already assigned to course' do
+        course = create(:course)
+        create(:tutor, course: course)
+
+        params = {
+          id: course.id,
+          tutors:
+            [
+              { name: 'test', mobile: '9812121213' }
+            ]
+        }
+
+        post :add_tutors, params: params
+        response_data = JSON.parse(response.body)
+        expect(response_data['status']).to eq('failed')
+        expect(response_data['message']['tutors[0].course_id']).to eq(["tutor already assigned to #{course.name}"])
+      end
     end
   end
 end

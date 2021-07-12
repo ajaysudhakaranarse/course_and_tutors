@@ -36,5 +36,9 @@ en:
   course:
     create:
       success: 'Course and tutors created successfully'
+    update:
+      success: 'Added tutors for course'
+    not_found: 'Course not found'
+
   user:
     unauthorize: 'Invalid user'
