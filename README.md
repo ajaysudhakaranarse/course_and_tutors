@@ -12,7 +12,7 @@ Things you may want to cover:
   5.1.7
 
 * Database
-  sqlite3
+  Postgres
 
 * Database initialization: rails db:create, rails db:migrate, rails db:seed
 
